@@ -7,43 +7,34 @@ struct EditorView: View {
     @State private var showShareSheet = false
     @State private var shareImage: UIImage?
     @State private var saveMessage: String?
-    @State private var randomCount = 0
-    @State private var showsTemplateAd: Bool
-    @State private var showsSaveAd = false
-
-    init(work: ChatWork, startsWithAd: Bool) {
+    init(work: ChatWork, startsWithAd: Bool = false) {
         _work = State(initialValue: work)
-        _showsTemplateAd = State(initialValue: startsWithAd)
     }
 
     var body: some View {
-        ZStack {
-            AppBackground()
+        VStack(spacing: 0) {
+            BannerAdView(adUnitID: AdUnitID.top)
+                .frame(height: 50)
 
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 16) {
-                    ChatPreviewView(work: work)
-                        .frame(height: 520)
-                        .shadow(color: .cyan.opacity(0.22), radius: 18)
+            ZStack {
+                AppBackground()
 
-                    if showsTemplateAd {
-                        AdPlaceholderView(label: "テンプレ選択後の広告エリア")
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 16) {
+                        ChatPreviewView(work: work)
+                            .frame(height: 520)
+                            .shadow(color: .cyan.opacity(0.22), radius: 18)
+
+                        editForm
+                        messageEditor
+                        actionButtons
                     }
-
-                    if randomCount > 0 && randomCount.isMultiple(of: 3) {
-                        AdPlaceholderView(label: "ランダム生成3回ごとの広告エリア")
-                    }
-
-                    if showsSaveAd {
-                        AdPlaceholderView(label: "画像保存後の広告エリア")
-                    }
-
-                    editForm
-                    messageEditor
-                    actionButtons
+                    .padding(16)
                 }
-                .padding(16)
             }
+
+            BannerAdView(adUnitID: AdUnitID.bottom)
+                .frame(height: 50)
         }
         .navigationTitle("編集")
         .navigationBarTitleDisplayMode(.inline)
@@ -217,8 +208,6 @@ struct EditorView: View {
         work.myBubbleStyle = newWork.myBubbleStyle
         work.theirBubbleStyle = newWork.theirBubbleStyle
         work.characterIcon = newWork.characterIcon
-        randomCount += 1
-        showsTemplateAd = false
     }
 
     private func saveWorkAndImage() {
@@ -229,7 +218,6 @@ struct EditorView: View {
         } else {
             saveMessage = "作品データを保存しました。画像の書き出しは失敗しました。"
         }
-        showsSaveAd = true
     }
 
     private func share() {
