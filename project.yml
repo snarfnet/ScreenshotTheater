@@ -45,9 +45,6 @@ targets:
           UIColorName: ""
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
-        UISupportedInterfaceOrientations~ipad:
-          - UIInterfaceOrientationPortrait
-          - UIInterfaceOrientationPortraitUpsideDown
         UIUserInterfaceStyle: Dark
         GADApplicationIdentifier: "ca-app-pub-9404799280370656~9796430707"
         SKAdNetworkItems:
